@@ -1,9 +1,8 @@
-// App.jsx
 import React, { useState, useEffect } from 'react';
 import Topbar from './components/topbar';
 import Sidebar from './components/sidebar';
 import ProductGrid from './components/productGrid';
-import ProductoManager from './components/producto';
+import Producto from './components/producto';
 import EstadisticasChart from './components/estadisticasChart';
 import Footers from './components/footers';
 import Login from './components/login';
@@ -19,7 +18,6 @@ function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [usuario, setUsuario] = useState(null);
     const [cargando, setCargando] = useState(true);
-    
     const [mostrarAdmin, setMostrarAdmin] = useState(false);
     const [mostrarEstadisticas, setMostrarEstadisticas] = useState(false);
 
@@ -33,15 +31,17 @@ function App() {
 
     const addToCart = (product) => {
         setCarrito([...carrito, { ...product, cartId: Date.now() }]);
-        alert(` ${product.nombre} agregado al carrito`);
+        alert(`${product.nombre} agregado al carrito`);
     };
 
     const generarPDF = () => {
-        if (productos.length > 0) {
-            pdfService.generarReporteProductos(productos);
-        } else {
-            alert('No hay productos para generar el reporte');
-        }
+        if (productos.length > 0) pdfService.generarReporteProductos(productos);
+        else alert('No hay productos');
+    };
+
+    const scrollToSection = (id) => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
     };
 
     const handleLoginSuccess = (user) => {
@@ -50,65 +50,61 @@ function App() {
         setPaginaActual('tienda');
     };
 
-    const handleLoginClick = () => {
-        setPaginaActual('login');
-    };
-
+    const handleLoginClick = () => setPaginaActual('login');
     const handleLogout = async () => {
         await api.logout();
         setIsLoggedIn(false);
         setUsuario(null);
         setPaginaActual('tienda');
     };
-
-    const isAdmin = true;  // Temporal, para pruebas
+    const isAdmin = usuario?.rol === 'admin';
 
     const styles = {
         modalOverlay: {
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.7)',
-            zIndex: 2000,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: '20px'
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.7)', zIndex: 2000,
+            display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px'
         },
         modalContent: {
-            backgroundColor: 'white',
-            borderRadius: '16px',
-            maxWidth: '95%',
-            maxHeight: '90vh',
-            overflowY: 'auto',
-            padding: '20px',
-            position: 'relative'
+            backgroundColor: 'white', borderRadius: '16px', maxWidth: '95%',
+            maxHeight: '90vh', overflowY: 'auto', padding: '20px', position: 'relative',top: '50%',                   // ← agrega esto
+            transform: 'translateY(-50%)'
         },
         modalHeader: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '20px',
-            paddingBottom: '10px',
-            borderBottom: '2px solid #eee'
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+            marginBottom: '20px', paddingBottom: '10px', borderBottom: '2px solid #eee'
         },
         modalTitle: { fontSize: '1.5rem', margin: 0 },
-        closeBtn: { backgroundColor: '#5d056e', color: 'white', border: 'none', borderRadius: '5px', padding: '8px 16px', cursor: 'pointer' },
-        
-        navbar: { backgroundColor: '#5d056e', padding: '0.8rem 1rem' },
-        navContainer: { maxWidth: '1400px', margin: '0 auto', display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' },
-        navLink: { color: 'white', textDecoration: 'none', fontSize: '0.9rem', cursor: 'pointer', background: 'none', border: 'none', padding: '8px 12px', borderRadius: '5px' },
-        navButton: { padding: '8px 16px', borderRadius: '5px', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 'bold', border: 'none' },
-        btnPdf: { backgroundColor: '#5d056e', color: 'white' },
-        btnStats: { backgroundColor: '#5d056e', color: 'white' },
-        btnCrud: { backgroundColor: '#5d056e', color: 'white' },
-        
-        mainContainer: { maxWidth: '1400px', margin: '2rem auto', padding: '0 1rem', display: 'flex', gap: '2rem', alignItems: 'flex-start' },
+        closeBtn: {
+            backgroundColor: '#5d056e', color: 'white', border: 'none',
+            borderRadius: '5px', padding: '8px 16px', cursor: 'pointer'
+        },
+        mainContainer: {
+            maxWidth: '1200px', margin: '2rem auto', padding: '0 0.5rem',
+            display: 'flex', gap: '1.5rem', alignItems: 'flex-start'
+        },
         sidebar: { width: '250px', flexShrink: 0, position: 'sticky', top: '1rem' },
         mainContent: { flex: 1, minWidth: 0 },
-        pageTitle: { marginBottom: '1.5rem', color: '#111', fontSize: '1.8rem' }
+        pageTitle: { marginBottom: '1.5rem', color: '#111', fontSize: '1.8rem' },
+        serviceBox: {
+            marginTop: '2rem',
+            padding: '1.5rem',
+            backgroundColor: '#f8f9fa',
+            borderRadius: '12px',
+            textAlign: 'center',
+            display: 'flex',
+            justifyContent: 'space-around',
+            flexWrap: 'wrap',
+            gap: '1rem'
+        },
+        serviceItem: {
+            flex: 1,
+            minWidth: '200px',
+            padding: '1rem',
+            backgroundColor: 'white',
+            borderRadius: '8px',
+            boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
+        }
     };
 
     if (cargando) return <div className="loading">Cargando...</div>;
@@ -117,7 +113,7 @@ function App() {
     if (paginaActual === 'login') {
         return (
             <>
-                <Topbar 
+                <Topbar
                     onRegistroClick={() => setPaginaActual('registro')}
                     onLoginClick={handleLoginClick}
                     onCarritoClick={() => alert(`Carrito: ${carrito.length}`)}
@@ -136,7 +132,7 @@ function App() {
     if (paginaActual === 'registro') {
         return (
             <>
-                <Topbar 
+                <Topbar
                     onRegistroClick={() => setPaginaActual('registro')}
                     onLoginClick={handleLoginClick}
                     onCarritoClick={() => alert(`Carrito: ${carrito.length}`)}
@@ -154,7 +150,7 @@ function App() {
     // Página principal (Tienda)
     return (
         <>
-            <Topbar 
+            <Topbar
                 onRegistroClick={() => setPaginaActual('registro')}
                 onLoginClick={handleLoginClick}
                 onCarritoClick={() => alert(`Carrito: ${carrito.length} productos`)}
@@ -164,37 +160,20 @@ function App() {
                 usuario={usuario}
                 onLogout={handleLogout}
             />
-            
-            <nav style={styles.navbar}>
-                <div style={styles.navContainer}>
-                    <button style={styles.navLink}>Ofertas del día</button>
-                    <button style={styles.navLink}>Servicio al Cliente</button>
-                    <button style={styles.navLink}>Contactanos</button>
-                    
-                    <button 
-                        onClick={generarPDF} 
-                        style={{ ...styles.navButton, ...styles.btnPdf }}
-                    >
-                         Reporte PDF
-                    </button>
-                    
-                    <button 
-                        onClick={() => setMostrarEstadisticas(true)} 
-                        style={{ ...styles.navButton, ...styles.btnStats }}
-                    >
-                         Estadísticas
-                    </button>
-                    
+
+            {/* Menú principal */}
+            <div className="menu-principal">
+                <div className="menu-container">
+                    <button className="menu-link" onClick={() => scrollToSection('ofertas')}>Ofertas del día</button>
+                    <button className="menu-link" onClick={() => scrollToSection('servicio')}>Servicio al Cliente</button>
+                    <button className="menu-link" onClick={() => scrollToSection('contacto')}>Contactanos</button>
+                    <button className="menu-btn" onClick={generarPDF}>Reporte PDF</button>
+                    <button className="menu-btn" onClick={() => setMostrarEstadisticas(true)}>Estadísticas</button>
                     {isAdmin && (
-                        <button 
-                            onClick={() => setMostrarAdmin(true)} 
-                            style={{ ...styles.navButton, ...styles.btnCrud }}
-                        >
-                             Admin CRUD
-                        </button>
+                        <button className="menu-btn" onClick={() => setMostrarAdmin(true)}>Productos</button>
                     )}
                 </div>
-            </nav>
+            </div>
 
             <div style={styles.mainContainer}>
                 <aside style={styles.sidebar}>
@@ -203,34 +182,38 @@ function App() {
                 <main style={styles.mainContent}>
                     <h3 style={styles.pageTitle}>Renueva tu estilo - Ropa para mujer</h3>
                     <ProductGrid addToCart={addToCart} onProductosCargados={setProductos} />
+
                 </main>
             </div>
-            
+
             <Footers />
 
+            {/* MODAL CRUD */}
             {mostrarAdmin && (
                 <div style={styles.modalOverlay} onClick={() => setMostrarAdmin(false)}>
                     <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
                         <div style={styles.modalHeader}>
-                            <h2 style={styles.modalTitle}> Administrar Productos</h2>
+                            <h2 style={styles.modalTitle}>Administrar Productos</h2>
                             <button style={styles.closeBtn} onClick={() => setMostrarAdmin(false)}>Cerrar</button>
                         </div>
-                        <ProductoManager onProductosChange={setProductos} />
+                        <Producto onProductosChange={setProductos} />
                     </div>
                 </div>
             )}
 
+            {/* MODAL ESTADÍSTICAS */}
             {mostrarEstadisticas && (
                 <div style={styles.modalOverlay} onClick={() => setMostrarEstadisticas(false)}>
                     <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
                         <div style={styles.modalHeader}>
-                            <h2 style={styles.modalTitle}> Estadísticas de la Tienda</h2>
+                            <h2 style={styles.modalTitle}>Estadísticas de la Tienda</h2>
                             <button style={styles.closeBtn} onClick={() => setMostrarEstadisticas(false)}>Cerrar</button>
                         </div>
                         <EstadisticasChart />
                     </div>
                 </div>
             )}
+            
         </>
     );
 }

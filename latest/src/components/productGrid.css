@@ -1,50 +1,50 @@
-/* components/productGrid.css */
 .products-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;  
-    padding: 0;  
+    gap: 1.5rem;
+    padding: 0;
 }
 
 .product-card {
     background-color: #808080;
-    border-radius: 10px;  /* Reducido */
+    border-radius: 12px;
     overflow: hidden;
     transition: transform 0.3s, box-shadow 0.3s;
     height: 100%;
     display: flex;
     flex-direction: column;
+    padding: 1.2rem; /* más padding interno */
 }
 
 .product-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .product-info {
-    padding: 0.8rem;  
     text-align: center;
     flex: 1;
     display: flex;
     flex-direction: column;
+    gap: 0.6rem;
 }
 
 .product-title {
-    font-size: 1rem;  
-    margin-bottom: 0.4rem;
-    color: #111;
+    font-size: 1.2rem;
     font-weight: 600;
+    color: #111;
+    margin-bottom: 0.2rem;
 }
 
 .precio-container {
     background-color: #f0f0f0;
-    padding: 6px;  
-    border-radius: 6px;
-    margin: 8px 0;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 4px 0;
 }
 
 .product-price {
-    font-size: 20px;  
+    font-size: 26px;
     font-weight: bold;
     color: #2c3e50;
     margin: 0;
@@ -53,46 +53,47 @@
 .product-colors {
     display: flex;
     justify-content: center;
-    gap: 6px;  
-    margin: 8px 0;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 4px 0;
 }
 
 .color-dot {
-    width: 18px;  
-    height: 18px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     border: 1px solid #ccc;
-    cursor: pointer;
-    transition: transform 0.2s;
+    cursor: default;
 }
 
 .product-sizes {
-    font-size: 0.8rem; 
+    font-size: 1rem;
     color: #111;
-    margin: 8px 0;
+    margin: 4px 0;
 }
 
 .add-to-cart {
     background-color: #5d056e;
     color: white;
     border: none;
-    padding: 8px;  
-    border-radius: 5px;
+    padding: 12px;
+    border-radius: 6px;
     cursor: pointer;
     margin-top: auto;
-    font-size: 0.85rem;
-    transition: background 0.3s;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s;
 }
 
 .add-to-cart:hover {
-    background-color: #5d056e;
+    background-color: #3d0448;
 }
 
-/* Responsive: tablets */
+/* Responsive */
 @media (max-width: 900px) {
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 0.8rem;
+        gap: 1rem;
     }
 }
 @media (max-width: 600px) {

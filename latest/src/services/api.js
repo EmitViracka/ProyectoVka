@@ -1,4 +1,3 @@
-// services/api.js
 const API_URL = 'http://localhost:3001/api';
 
 // ============ FUNCIONES AUXILIARES ============
@@ -34,7 +33,7 @@ export const api = {
             if (!response.ok) throw new Error('Error');
             return await response.json();
         } catch (error) {
-            console.error('❌ Error:', error);
+            console.error(' Error:', error);
             return [];
         }
     },
@@ -45,7 +44,7 @@ export const api = {
             if (!response.ok) throw new Error('Producto no encontrado');
             return await response.json();
         } catch (error) {
-            console.error('❌ Error:', error);
+            console.error(' Error:', error);
             return null;
         }
     },

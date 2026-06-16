@@ -47,7 +47,6 @@ function Registro({ onRegistroSuccess }) {
         setError("");
         setExito("");
 
-        // ============ LIMPIAR Y VALIDAR DATOS ============
         const nombreLimpio = formData.nombre.trim();
         const emailLimpio = formData.email.trim().toLowerCase();
         const passwordLimpia = formData.password.trim();
@@ -61,7 +60,7 @@ function Registro({ onRegistroSuccess }) {
         console.log('   CAPTCHA:', captchaText);
 
         if (!captchaText) {
-            setError("❌ Debes ingresar el código CAPTCHA");
+            setError(" Debes ingresar el código CAPTCHA");
             setCargando(false);
             return;
         }

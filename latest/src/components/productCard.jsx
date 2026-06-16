@@ -6,10 +6,10 @@ const ProductCard = ({ product, addToCart }) => {
         return <div className="product-card error">Producto no disponible</div>;
     }
 
-    const precio = product.precio || product.price || 0;
-    const nombre = product.nombre || product.name || 'Producto sin nombre';
-    const colors = Array.isArray(product.colors) ? product.colors : [];
-    const sizes = Array.isArray(product.sizes) ? product.sizes : [];
+    const precio = product.precio || 0;
+    const nombre = product.nombre || 'Producto sin nombre';
+    const colores = Array.isArray(product.colores) ? product.colores : [];
+    const tallas = Array.isArray(product.tallas) ? product.tallas : [];
 
     return (
         <div className="product-card">
@@ -18,10 +18,9 @@ const ProductCard = ({ product, addToCart }) => {
                 <div className="precio-container">
                     <p className="product-price">Bs {precio}</p>
                 </div>
-                
                 <div className="product-colors">
-                    {colors.length > 0 ? (
-                        colors.map((color, i) => (
+                    {colores.length > 0 ? (
+                        colores.map((color, i) => (
                             <span 
                                 key={i} 
                                 className="color-dot" 
@@ -33,11 +32,9 @@ const ProductCard = ({ product, addToCart }) => {
                         <span className="no-colors">Sin colores</span>
                     )}
                 </div>
-                
                 <p className="product-sizes">
-                    Tallas: {sizes.length > 0 ? sizes.join(', ') : 'No disponible'}
+                    Tallas: {tallas.length > 0 ? tallas.join(', ') : 'No disponible'}
                 </p>
-                
                 <button className="add-to-cart" onClick={() => addToCart(product)}>
                     Agregar al carrito
                 </button>
